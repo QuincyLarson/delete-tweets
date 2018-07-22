@@ -51,16 +51,10 @@ def main():
 
     args = parser.parse_args()
 
-    if not ("TWITTER_CONSUMER_KEY" in os.environ and
-            "TWITTER_CONSUMER_SECRET" in os.environ and
-            "TWITTER_ACCESS_TOKEN" in os.environ and
-            "TWITTER_ACCESS_TOKEN_SECRET" in os.environ):
-        error("No consumer key/secret and/or access token/secret set.")
-
-    api = twitter.Api(consumer_key=os.environ['TWITTER_CONSUMER_KEY'],
-                      consumer_secret=os.environ['TWITTER_CONSUMER_SECRET'],
-                      access_token_key=os.environ['TWITTER_ACCESS_TOKEN'],
-                      access_token_secret=os.environ['TWITTER_ACCESS_TOKEN_SECRET'])
+    api = twitter.Api(consumer_key="",
+                      consumer_secret="",
+                      access_token_key="",
+                      access_token_secret="")
 
     delete(api, args.date, args.restrict)
 
