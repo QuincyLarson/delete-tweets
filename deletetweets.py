@@ -12,7 +12,7 @@ __author__ = "Koen Rouwhorst"
 __version__ = "0.1"
 
 def delete(api, date, r):
-    with open("tweets.csv") as file:
+    with open("tweets.csv", encoding="utf8") as file:
         count = 0
 
         for row in csv.DictReader(file):
@@ -27,16 +27,16 @@ def delete(api, date, r):
                 continue
 
             try:
-                print "Deleting tweet #{0} ({1})".format(tweet_id, tweet_date)
+                print("Deleting tweet #{0} ({1})".format(tweet_id, tweet_date))
 
                 api.DestroyStatus(tweet_id)
                 count += 1
                 time.sleep(0.5)
 
-            except twitter.TwitterError, err:
-                print "Exception: %s\n" % err.message
+            except twitter.TwitterError as err:
+                print("Exception: %s\n" % err.message)
 
-    print "Number of deleted tweets: %s\n" % count
+    print("Number of deleted tweets: %s\n" % count)
 
 def error(msg, exit_code=1):
     sys.stderr.write("Error: %s\n" % msg)
