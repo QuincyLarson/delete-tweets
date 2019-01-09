@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 import argparse
-import csv
+import json
 import sys
 import time
 import os
@@ -11,19 +11,18 @@ from dateutil.parser import parse
 __author__ = "Koen Rouwhorst"
 __version__ = "0.1"
 
-def delete(api, date, r):
-    with open("tweets.csv") as file:
+def delete(api, date):   
+    with open("tweet.js") as file:
         count = 0
 
-        for row in csv.DictReader(file):
-            tweet_id = int(row["tweet_id"])
-            tweet_date = parse(row["timestamp"], ignoretz=True).date()
+        file_string = file.read().replace('window.YTD.tweet.part0 = ', '')
+        tweet_list = json.loads(file_string)
+
+        for tweet in tweet_list:
+            tweet_id = tweet['id']
+            tweet_date = parse(tweet['created_at'], ignoretz=True).date()
 
             if date != "" and tweet_date >= parse(date).date():
-                continue
-
-            if (r == "retweet" and row["retweeted_status_id"] == "" or
-                    r == "reply" and row["in_reply_to_status_id"] == ""):
                 continue
 
             try:
@@ -46,8 +45,6 @@ def main():
     parser = argparse.ArgumentParser(description="Delete old tweets.")
     parser.add_argument("-d", dest="date", required=True,
                         help="Delete tweets until this date")
-    parser.add_argument("-r", dest="restrict", choices=["reply", "retweet"],
-                        help="Restrict to either replies or retweets")
 
     args = parser.parse_args()
 
@@ -56,8 +53,7 @@ def main():
                       access_token_key="",
                       access_token_secret="")
 
-    delete(api, args.date, args.restrict)
-
+    delete(api, args.date)
 
 if __name__ == "__main__":
     main()
