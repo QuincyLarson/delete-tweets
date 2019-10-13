@@ -6,18 +6,19 @@ import sys
 import time
 import os
 import twitter
+import json
 from dateutil.parser import parse
 
 __author__ = "Koen Rouwhorst"
-__version__ = "0.1"
+__version__ = "0.2"
 
 def delete(api, date, r):
-    with open("tweets.csv") as file:
+    with open("tweet.js") as file:
         count = 0
 
-        for row in csv.DictReader(file):
-            tweet_id = int(row["tweet_id"])
-            tweet_date = parse(row["timestamp"], ignoretz=True).date()
+        for row in json.load(file):
+            tweet_id = int(row["id"])
+            tweet_date = parse(row["created_at"], ignoretz=True).date()
 
             if date != "" and tweet_date >= parse(date).date():
                 continue
